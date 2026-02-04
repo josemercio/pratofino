@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prato Fino</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+</head>
+<body>
+<!-- 🔊 SONS -->
+<audio id="somClick" src="click.mp3" preload="auto"></audio>
+<audio id="somFinalizar" src="ding.mp3" preload="auto"></audio>
+
+<header class="topo">
+  <div class="logo-area">
+    <div class="logo">
+      <img src="chefe.jpg" alt="Chefe do restaurante">
+    </div>
+    <h1>Prato Fino</h1>
+  </div>
+
+  <div class="contato">
+    <img src="whatsapp.png" class="whatsapp-icone" alt="Ícone WhatsApp">
+    (84) 9 9627-4263
+  </div>
+</header>
+
+<div class="linha"></div>
+
+<section class="pratos">
+  <img src="prato1.png">
+  <img src="prato2.png">
+  <img src="prato3.png">
+  <img src="prato4.png">
+  <img src="prato5.png">
+</section>
+
+<section class="nossos-pratos">
+  <h2>Nossos <span>PRATOS</span></h2>
+
+  <!-- Prato 1 -->
+  <div class="prato-item">
+    <div class="foto-container">
+      <img src="carpaccio.png">
+    </div>
+    <div class="descricao-container">
+      <p>Carpaccio de salmão com molho de mostarda e mel</p>
+      <p class="preco">R$ 86,00</p>
+      <div class="quantidade-container">
+        <button onclick="alterarQuantidade(this,-1,86,'Carpaccio_de_salmao')">-</button>
+        <span id="qtd-Carpaccio_de_salmao">(0)</span>
+        <button onclick="alterarQuantidade(this,1,86,'Carpaccio_de_salmao')">+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Prato 2 -->
+  <div class="prato-item">
+    <div class="foto-container">
+      <img src="ceviche.png">
+    </div>
+    <div class="descricao-container">
+      <p>Ceviche de tilápia</p>
+      <p class="preco">R$ 76,89</p>
+      <div class="quantidade-container">
+        <button onclick="alterarQuantidade(this,-1,76.89,'Ceviche_de_tilapia')">-</button>
+        <span id="qtd-Ceviche_de_tilapia">(0)</span>
+        <button onclick="alterarQuantidade(this,1,76.89,'Ceviche_de_tilapia')">+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Prato 3 -->
+  <div class="prato-item">
+    <div class="foto-container">
+      <img src="tornedor.png">
+    </div>
+    <div class="descricao-container">
+      <p>Tornedor de filé mignon ao molho roti</p>
+      <p class="preco">R$ 98,90</p>
+      <div class="quantidade-container">
+        <button onclick="alterarQuantidade(this,-1,98.9,'Tornedor_de_file_mignon')">-</button>
+        <span id="qtd-Tornedor_de_file_mignon">(0)</span>
+        <button onclick="alterarQuantidade(this,1,98.9,'Tornedor_de_file_mignon')">+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Prato 4 -->
+  <div class="prato-item">
+    <div class="foto-container">
+      <img src="risoto.png">
+    </div>
+    <div class="descricao-container">
+      <p>Risoto de camarão</p>
+      <p class="preco">R$ 116,00</p>
+      <div class="quantidade-container">
+        <button onclick="alterarQuantidade(this,-1,116,'Risoto_de_camarao')">-</button>
+        <span id="qtd-Risoto_de_camarao">(0)</span>
+        <button onclick="alterarQuantidade(this,1,116,'Risoto_de_camarao')">+</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pedido">
+  <h3>Seu pedido</h3>
+  <div id="lista-pratos">Nenhum prato selecionado</div>
+  <p id="total">Total: R$ 0,00</p>
+  <button id="limpar-pedido" onclick="limparPedido()">Limpar Pedido</button>
+</section>
+
+<div class="pedido-flutuante">
+  <button onclick="abrirPagamento()">Finalizar Pedido</button>
+</div>
+
+<!-- MODAL PAGAMENTO -->
+<div id="modal-pagamento" class="modal oculto">
+  <div class="modal-conteudo">
+    <h3>Resumo do pedido</h3>
+    <div id="resumo-pedido"></div>
+    <p id="total-modal"></p>
+
+    <div class="cupom-container">
+      <input type="text" id="input-cupom" placeholder="Digite seu cupom">
+      <button onclick="aplicarCupom()">Aplicar</button>
+      <p id="mensagem-cupom" style="margin-top:5px; font-size:14px; color:#d05252;"></p>
+    </div>
+
+    <div class="endereco-container">
+      <input type="text" id="endereco-rua" placeholder="Rua">
+      <input type="text" id="endereco-numero" placeholder="Número">
+    </div>
+
+    <!-- NOVO: OBSERVAÇÕES -->
+    <div class="observacoes-container">
+      <textarea id="observacoes-pedido" placeholder="Observações sobre o pedido..." rows="3"></textarea>
+    </div>
+
+    <div class="opcoes-pagamento">
+      <button onclick="mostrarPIX()">PIX</button>
+      <button onclick="enviarPedido('Cartão')">Cartão</button>
+      <button onclick="enviarPedido('Espécie')">Espécie</button>
+    </div>
+
+    <div id="pix-container" class="oculto pix-box">
+      <canvas id="qrcode"></canvas>
+      <p>Chave PIX: <span id="pix-chave">017.241.544-60</span></p>
+      <button class="copiar-btn" onclick="copiarChave()">Copiar Chave</button>
+    </div>
+
+    <button class="fechar" onclick="fecharModal()">Fechar</button>
+  </div>
+</div>
+
+<!-- RODAPÉ -->
+<footer class="rodape">
+  <div class="rodape-conteudo">
+    <div class="rodape-coluna">
+      <h4>Prato Fino</h4>
+      <p>Alta gastronomia com sabor e tradição.</p>
+    </div>
+    <div class="rodape-coluna">
+      <h4>Funcionamento</h4>
+      <p>Seg a Sex: 11h às 22h</p>
+      <p>Sáb e Dom: 11h às 23h</p>
+    </div>
+    <div class="rodape-coluna">
+      <h4>Contato</h4>
+      <p>Lajes - RN</p>
+      <p>(84) 9 9627-4263</p>
+    </div>
+  </div>
+  <div class="rodape-final">
+    © 2026 Prato Fino — Trabalho Escolar
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
